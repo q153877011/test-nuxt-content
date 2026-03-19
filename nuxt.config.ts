@@ -32,9 +32,11 @@ export default defineNuxtConfig({
   // ===== 混合渲染配置 =====
   // 可以为不同路由指定不同的渲染策略
   routeRules: {
-    // 博客文章：ISR 模式，生成后缓存 60 秒，后台重新验证
-    '/blog/**': { isr: 60 },
     // 首页：预渲染为静态页面
-    '/': { prerender: true }
+    '/': { prerender: true },
+    // 博客列表页：ISR 模式
+    '/blog': { isr: 60 },
+    // 博客文章详情页：ISR 模式，缓存 60 秒后后台重新验证
+    '/blog/**': { isr: 60 }
   }
 })
