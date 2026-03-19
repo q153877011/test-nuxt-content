@@ -32,7 +32,7 @@
 <script setup lang="ts">
 const { data: posts } = await useAsyncData('blog-list', () =>
   queryCollection('content')
-    .path('/blog')
+    .where('path', 'LIKE', '/blog/%')
     .order('date', 'DESC')
     .all()
 )

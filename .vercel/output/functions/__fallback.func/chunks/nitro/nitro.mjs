@@ -4088,7 +4088,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "5257f182-9a58-40c5-9961-8b97b37f00ca",
+    "buildId": "0fa8d54c-7078-4c86-8659-e4a3b6f186b8",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -4103,10 +4103,10 @@ const _inlineRuntimeConfig = {
         "prerender": true
       },
       "/blog": {
-        "isr": 60
+        "prerender": true
       },
       "/blog/**": {
-        "isr": 60
+        "prerender": true
       },
       "/__nuxt_content/**": {
         "robots": false,
@@ -4130,9 +4130,6 @@ const _inlineRuntimeConfig = {
         "headers": {
           "cache-control": "public, max-age=31536000, immutable"
         }
-      },
-      "/blog/_payload.json": {
-        "isr": 60
       }
     }
   },
@@ -5303,5 +5300,5 @@ const listener = function(req, res) {
   return handler(req, res);
 };
 
-export { $fetch$1 as $, defu as A, pascalCase as B, kebabCase as C, getRequestHeaders as D, withLeadingSlash as E, listener as F, useStorage as a, buildAssetsURL as b, getResponseStatus as c, defineRenderHandler as d, getQuery as e, createError$1 as f, getResponseStatusText as g, destr as h, getRouteRules as i, joinURL as j, useNitroApp as k, parseQuery as l, getContext as m, hasProtocol as n, parseURL as o, publicAssetsURL as p, encodePath as q, decodePath as r, isScriptProtocol as s, withTrailingSlash as t, useRuntimeConfig as u, withoutTrailingSlash as v, withQuery as w, sanitizeStatusCode as x, baseURL as y, executeAsync as z };
+export { $fetch$1 as $, pascalCase as A, kebabCase as B, getRequestHeaders as C, withLeadingSlash as D, listener as E, getResponseStatus as a, buildAssetsURL as b, getQuery as c, defineRenderHandler as d, createError$1 as e, destr as f, getResponseStatusText as g, getRouteRules as h, useNitroApp as i, joinURL as j, parseQuery as k, getContext as l, hasProtocol as m, parseURL as n, encodePath as o, publicAssetsURL as p, decodePath as q, isScriptProtocol as r, withTrailingSlash as s, withoutTrailingSlash as t, useRuntimeConfig as u, sanitizeStatusCode as v, withQuery as w, baseURL as x, executeAsync as y, defu as z };
 //# sourceMappingURL=nitro.mjs.map

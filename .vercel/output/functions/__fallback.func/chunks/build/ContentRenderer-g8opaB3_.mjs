@@ -1,6 +1,6 @@
 import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { computed, toRaw, mergeProps, unref, resolveComponent, defineAsyncComponent, defineComponent, h, getCurrentInstance, reactive, watch, Text, Comment, useSSRContext } from 'vue';
 import { ssrRenderComponent, ssrRenderSlot } from 'vue/server-renderer';
-import { B as pascalCase, C as kebabCase, h as destr } from '../nitro/nitro.mjs';
+import { A as pascalCase, B as kebabCase, f as destr } from '../nitro/nitro.mjs';
 import { find, html } from 'property-information';
 import { toHast } from 'minimark/hast';
 import { c as useRuntimeConfig } from './server.mjs';

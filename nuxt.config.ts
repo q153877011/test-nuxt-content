@@ -24,19 +24,19 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   // ===== 部署配置 =====
-  // Vercel 部署时会自动检测，也可以显式指定：
-  // nitro: {
-  //   preset: 'vercel'
-  // },
-
-  // ===== 混合渲染配置 =====
-  // 可以为不同路由指定不同的渲染策略
-  routeRules: {
-    // 首页：预渲染为静态页面
-    '/': { prerender: true },
-    // 博客列表页：ISR 模式
-    '/blog': { isr: 60 },
-    // 博客文章详情页：ISR 模式，缓存 60 秒后后台重新验证
-    '/blog/**': { isr: 60 }
-  }
+ nitro: {
+    preset: 'cloudflare_module',
+    cloudflare: {
+      deployConfig: true,
+      wrangler: {
+        d1_databases: [
+          {
+            binding: 'DB',
+            database_name: 'test-nuxt-content',
+            database_id: 'f0d4d832-57f0-4312-8ac6-6ea55d8db4af'
+          }
+        ]
+      },
+    },
+  },
 })

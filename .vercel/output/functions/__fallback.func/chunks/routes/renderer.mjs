@@ -1,5 +1,5 @@
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'vue-bundle-renderer/runtime';
-import { b as buildAssetsURL, u as useRuntimeConfig, a as useStorage, g as getResponseStatusText, c as getResponseStatus, d as defineRenderHandler, p as publicAssetsURL, e as getQuery, f as createError, h as destr, i as getRouteRules, j as joinURL, k as useNitroApp } from '../nitro/nitro.mjs';
+import { b as buildAssetsURL, u as useRuntimeConfig, g as getResponseStatusText, a as getResponseStatus, d as defineRenderHandler, p as publicAssetsURL, c as getQuery, e as createError, f as destr, h as getRouteRules, j as joinURL, i as useNitroApp } from '../nitro/nitro.mjs';
 import { renderToString } from 'vue/server-renderer';
 import { createHead as createHead$1, propsToString, renderSSRHead } from 'unhead/server';
 import { stringify, uneval } from 'devalue';
@@ -74,6 +74,7 @@ function createHead(options = {}) {
 }
 
 const NUXT_PAYLOAD_INLINE = false;
+const NUXT_RUNTIME_PAYLOAD_EXTRACTION = false;
 
 const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[]};
 
@@ -172,8 +173,6 @@ function getRenderer(ssrContext) {
 }
 // @ts-expect-error file will be produced after app build
 const getSSRStyles = lazyCachedFunction(() => import('../build/styles.mjs').then((r) => r.default || r));
-
-const payloadCache = useStorage("cache:nuxt:payload") ;
 
 function renderPayloadResponse(ssrContext) {
 	return {
@@ -309,7 +308,7 @@ const handler = defineRenderHandler(async (event) => {
 	// Get route options (for `ssr: false`, `isr`, `cache` and `noScripts`)
 	const routeOptions = getRouteRules(event);
 	// Whether we are prerendering route or using ISR/SWR caching
-	const _PAYLOAD_EXTRACTION = !ssrContext.noSSR && ((routeOptions.isr || routeOptions.cache));
+	const _PAYLOAD_EXTRACTION = !ssrContext.noSSR && (NUXT_RUNTIME_PAYLOAD_EXTRACTION);
 	// When NUXT_PAYLOAD_INLINE is true (payloadExtraction: 'client'), we inline the full payload
 	// in the HTML to avoid a separate _payload.json fetch on initial load (which would trigger a
 	// second render or lambda invocation). The _payload.json endpoint still works for client-side nav.
@@ -319,9 +318,6 @@ const handler = defineRenderHandler(async (event) => {
 		const url = ssrContext.url.substring(0, ssrContext.url.lastIndexOf("/")) || "/";
 		ssrContext.url = url;
 		event._path = event.node.req.url = url;
-		if (payloadCache && await payloadCache.hasItem(url)) {
-			return payloadCache.getItem(url);
-		}
 	}
 	if (routeOptions.ssr === false) {
 		ssrContext.noSSR = true;
@@ -363,17 +359,7 @@ const handler = defineRenderHandler(async (event) => {
 	// Directly render payload routes
 	if (isRenderingPayload) {
 		const response = renderPayloadResponse(ssrContext);
-		if (payloadCache) {
-			await payloadCache.setItem(ssrContext.url, response);
-		}
 		return response;
-	}
-	if (_PAYLOAD_EXTRACTION) {
-		// Cache payload from the current SSR context so _payload.json requests can be served
-		// without a full re-render (during prerender via LRU+FS, at runtime via in-memory TTL cache)
-		if (payloadCache) {
-			await payloadCache.setItem(ssrContext.url === "/" ? "/" : ssrContext.url.replace(/\/$/, ""), renderPayloadResponse(ssrContext));
-		}
 	}
 	const NO_SCRIPTS = routeOptions.noScripts;
 	// Setup head

@@ -3,6 +3,18 @@
   "overrides": {
     "index.html": {
       "path": ""
+    },
+    "blog/index.html": {
+      "path": "blog"
+    },
+    "blog/getting-started/index.html": {
+      "path": "blog/getting-started"
+    },
+    "blog/markdown-tips/index.html": {
+      "path": "blog/markdown-tips"
+    },
+    "blog/vue-composables/index.html": {
+      "path": "blog/vue-composables"
     }
   },
   "routes": [
@@ -49,28 +61,12 @@
       "handle": "filesystem"
     },
     {
-      "src": "(?<__isr_route>/blog/_payload.json)",
-      "dest": "/blog/_payload.json-isr?__isr_route=$__isr_route"
-    },
-    {
       "src": "(?<__isr_route>/__nuxt_error)",
       "dest": "/__fallback"
     },
     {
-      "src": "(?<__isr_route>/blog)",
-      "dest": "/blog-isr?__isr_route=$__isr_route"
-    },
-    {
-      "src": "(?<__isr_route>/blog/(?:.*))",
-      "dest": "/blog/[...]-isr?__isr_route=$__isr_route"
-    },
-    {
       "src": "(?<__isr_route>/__nuxt_content/(?:.*))",
       "dest": "/__fallback"
-    },
-    {
-      "src": "/blog",
-      "dest": "/blog"
     },
     {
       "src": "/__nuxt_error",

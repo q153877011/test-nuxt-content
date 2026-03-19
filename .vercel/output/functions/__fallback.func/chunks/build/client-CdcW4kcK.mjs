@@ -1,7 +1,7 @@
 import { defineComponent, shallowRef, getCurrentInstance, provide, cloneVNode, h, createElementBlock, computed, toValue, onServerPrefetch, ref, nextTick, unref, toRef } from 'vue';
 import { debounce } from 'perfect-debounce';
 import { t as tryUseNuxtApp, b as useNuxtApp, d as asyncDataDefaults, e as createError } from './server.mjs';
-import { v as withoutTrailingSlash, D as getRequestHeaders } from '../nitro/nitro.mjs';
+import { t as withoutTrailingSlash, C as getRequestHeaders } from '../nitro/nitro.mjs';
 
 const clientOnlySymbol = /* @__PURE__ */ Symbol.for("nuxt:client-only");
 defineComponent({

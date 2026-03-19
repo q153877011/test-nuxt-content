@@ -43,7 +43,7 @@ const { data: page } = await useAsyncData('index', () =>
 
 const { data: posts } = await useAsyncData('latest-posts', () =>
   queryCollection('content')
-    .path('/blog')
+    .where('path', 'LIKE', '/blog/%')
     .order('date', 'DESC')
     .limit(5)
     .all()
