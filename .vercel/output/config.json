@@ -1,22 +1,6 @@
 {
   "version": 3,
-  "overrides": {
-    "index.html": {
-      "path": ""
-    },
-    "blog/index.html": {
-      "path": "blog"
-    },
-    "blog/getting-started/index.html": {
-      "path": "blog/getting-started"
-    },
-    "blog/markdown-tips/index.html": {
-      "path": "blog/markdown-tips"
-    },
-    "blog/vue-composables/index.html": {
-      "path": "blog/vue-composables"
-    }
-  },
+  "overrides": {},
   "routes": [
     {
       "headers": {
@@ -69,6 +53,10 @@
       "dest": "/__fallback"
     },
     {
+      "src": "/blog",
+      "dest": "/blog"
+    },
+    {
       "src": "/__nuxt_error",
       "dest": "/__nuxt_error"
     },
@@ -83,6 +71,10 @@
     {
       "src": "/__nuxt_content/content/query",
       "dest": "/__nuxt_content/content/query"
+    },
+    {
+      "src": "/",
+      "dest": "/index"
     },
     {
       "src": "/blog/?(?<slug>.+)",

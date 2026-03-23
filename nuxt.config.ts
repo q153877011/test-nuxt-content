@@ -18,25 +18,31 @@ export default defineNuxtConfig({
           theme: 'github-dark'
         }
       }
+    },
+    // 使用 PostgreSQL 替代默认的 SQLite
+    // 解决 Vercel Serverless 中 better-sqlite3 native 模块崩溃的问题
+    database: {
+      type: 'postgresql',
+      url: process.env.POSTGRES_URL,
     }
   },
 
   css: ['~/assets/css/main.css'],
 
-  // ===== 部署配置 =====
- nitro: {
-    preset: 'cloudflare_module',
-    cloudflare: {
-      deployConfig: true,
-      wrangler: {
-        d1_databases: [
-          {
-            binding: 'DB',
-            database_name: 'test-nuxt-content',
-            database_id: 'f0d4d832-57f0-4312-8ac6-6ea55d8db4af'
-          }
-        ]
-      },
-    },
-  },
+  // cf ===== 部署配置 =====
+//  nitro: {
+//     preset: 'cloudflare_module',
+//     cloudflare: {
+//       deployConfig: true,
+//       wrangler: {
+//         d1_databases: [
+//           {
+//             binding: 'DB',
+//             database_name: 'test-nuxt-content',
+//             database_id: 'f0d4d832-57f0-4312-8ac6-6ea55d8db4af'
+//           }
+//         ]
+//       },
+//     },
+//   },
 })

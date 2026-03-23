@@ -10,6 +10,7 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:path';
 import 'node:crypto';
+import 'pg';
 import 'better-sqlite3';
 import 'vue-router';
 import 'perfect-debounce';

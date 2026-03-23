@@ -9,6 +9,7 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:path';
 import 'node:crypto';
+import 'pg';
 import 'better-sqlite3';
 
 //#region src/utils.ts
@@ -566,18 +567,12 @@ const matcher = /* @__PURE__ */ (() => {
   return (m, p) => {
     let r = [];
     if (p.charCodeAt(p.length - 1) === 47) p = p.slice(0, -1) || "/";
-    if (p === "/") {
-      r.unshift({ data: $0 });
-    } else if (p === "/blog") {
-      r.unshift({ data: $0 });
-    } else if (p === "/__nuxt_content/content/sql_dump.txt") {
+    if (p === "/__nuxt_content/content/sql_dump.txt") {
       r.unshift({ data: $0 });
     }
     let s = p.split("/"), l = s.length;
     if (l > 1) {
-      if (s[1] === "blog") {
-        r.unshift({ data: $0, params: { "_": s.slice(2).join("/") } });
-      } else if (s[1] === "__nuxt_content") {
+      if (s[1] === "__nuxt_content") {
         r.unshift({ data: $1, params: { "_": s.slice(2).join("/") } });
       }
     }
@@ -585,11 +580,11 @@ const matcher = /* @__PURE__ */ (() => {
   };
 })();
 const _routeRulesMatcher = (path) => defu({}, ...matcher("", path).map((r) => r.data).reverse());
-const routeRulesMatcher = _routeRulesMatcher;
+const routeRulesMatcher$1 = _routeRulesMatcher;
 function getRouteRules(arg) {
   const path = typeof arg === "string" ? arg : arg.path;
   try {
-    return routeRulesMatcher(path);
+    return routeRulesMatcher$1(path);
   } catch (e) {
     console.error("[nuxt] Error matching route rules.", e);
     return {};

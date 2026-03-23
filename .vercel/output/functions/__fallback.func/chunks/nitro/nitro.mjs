@@ -5,6 +5,7 @@ import { Buffer as Buffer$1 } from 'node:buffer';
 import { promises, existsSync, mkdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { createHash } from 'node:crypto';
+import pg from 'pg';
 import Database from 'better-sqlite3';
 
 const suspectProtoRx = /"(?:_|\\u0{2}5[Ff]){2}(?:p|\\u0{2}70)(?:r|\\u0{2}72)(?:o|\\u0{2}6[Ff])(?:t|\\u0{2}74)(?:o|\\u0{2}6[Ff])(?:_|\\u0{2}5[Ff]){2}"\s*:/;
@@ -4088,7 +4089,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "0fa8d54c-7078-4c86-8659-e4a3b6f186b8",
+    "buildId": "d67cd2de-7e3a-4370-a74c-688b24ddb7eb",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -4098,15 +4099,6 @@ const _inlineRuntimeConfig = {
       "/__nuxt_error": {
         "cache": false,
         "isr": false
-      },
-      "/": {
-        "prerender": true
-      },
-      "/blog": {
-        "prerender": true
-      },
-      "/blog/**": {
-        "prerender": true
       },
       "/__nuxt_content/**": {
         "robots": false,
@@ -4179,8 +4171,8 @@ const _inlineRuntimeConfig = {
     "databaseVersion": "v3.5.0",
     "version": "3.12.0",
     "database": {
-      "type": "sqlite",
-      "filename": "/tmp/contents.sqlite"
+      "type": "postgresql",
+      "url": ""
     },
     "localDatabase": {
       "type": "sqlite",
@@ -4761,6 +4753,65 @@ class BoundStatement {
 	}
 }
 
+function postgresqlConnector(opts) {
+	let _client;
+	function getClient() {
+		if (_client) {
+			return _client;
+		}
+		const client = new pg.Client("url" in opts ? opts.url : opts);
+		_client = client.connect().then(() => {
+			_client = client;
+			return _client;
+		});
+		return _client;
+	}
+	const query = async (sql, params) => {
+		const client = await getClient();
+		return client.query(normalizeParams(sql), params);
+	};
+	return {
+		name: "postgresql",
+		dialect: "postgresql",
+		getInstance: () => getClient(),
+		exec: (sql) => query(sql),
+		prepare: (sql) => new StatementWrapper$1(sql, query),
+		dispose: async () => {
+			await (await _client)?.end?.();
+			_client = undefined;
+		}
+	};
+}
+// https://www.postgresql.org/docs/9.3/sql-prepare.html
+function normalizeParams(sql) {
+	let i = 0;
+	return sql.replace(/\?/g, () => `$${++i}`);
+}
+let StatementWrapper$1 = class StatementWrapper extends BoundableStatement {
+	#query;
+	#sql;
+	constructor(sql, query) {
+		super();
+		this.#sql = sql;
+		this.#query = query;
+	}
+	async all(...params) {
+		const res = await this.#query(this.#sql, params);
+		return res.rows;
+	}
+	async run(...params) {
+		const res = await this.#query(this.#sql, params);
+		return {
+			success: true,
+			...res
+		};
+	}
+	async get(...params) {
+		const res = await this.#query(this.#sql, params);
+		return res.rows[0];
+	}
+};
+
 function sqliteConnector(opts) {
 	let _db;
 	const getDB = () => {
@@ -4811,7 +4862,7 @@ function loadDatabaseAdapter(config) {
     if (["nitro-prerender", "nitro-dev"].includes("vercel")) {
       db = sqliteConnector(refineDatabaseConfig(localDatabase));
     } else {
-      db = sqliteConnector(refineDatabaseConfig(database));
+      db = postgresqlConnector(refineDatabaseConfig(database));
     }
   }
   return {
