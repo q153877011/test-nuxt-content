@@ -6,7 +6,6 @@ import { promises, existsSync, mkdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { createHash } from 'node:crypto';
 import pg from 'pg';
-import Database from 'better-sqlite3';
 
 const suspectProtoRx = /"(?:_|\\u0{2}5[Ff]){2}(?:p|\\u0{2}70)(?:r|\\u0{2}72)(?:o|\\u0{2}6[Ff])(?:t|\\u0{2}74)(?:o|\\u0{2}6[Ff])(?:_|\\u0{2}5[Ff]){2}"\s*:/;
 const suspectConstructorRx = /"(?:c|\\u0063)(?:o|\\u006[Ff])(?:n|\\u006[Ee])(?:s|\\u0073)(?:t|\\u0074)(?:r|\\u0072)(?:u|\\u0075)(?:c|\\u0063)(?:t|\\u0074)(?:o|\\u006[Ff])(?:r|\\u0072)"\s*:/;
@@ -4089,7 +4088,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "d67cd2de-7e3a-4370-a74c-688b24ddb7eb",
+    "buildId": "36b308e8-49a1-43c9-8ff5-da7e074a6360",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -4811,6 +4810,8 @@ let StatementWrapper$1 = class StatementWrapper extends BoundableStatement {
 		return res.rows[0];
 	}
 };
+
+const Database = Object.freeze(Object.create(null, { __unenv__: { get: () => true } }));
 
 function sqliteConnector(opts) {
 	let _db;

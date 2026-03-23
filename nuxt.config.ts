@@ -1,4 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { resolve, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -29,20 +34,12 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  // cf ===== 部署配置 =====
-//  nitro: {
-//     preset: 'cloudflare_module',
-//     cloudflare: {
-//       deployConfig: true,
-//       wrangler: {
-//         d1_databases: [
-//           {
-//             binding: 'DB',
-//             database_name: 'test-nuxt-content',
-//             database_id: 'f0d4d832-57f0-4312-8ac6-6ea55d8db4af'
-//           }
-//         ]
-//       },
-//     },
-//   },
+  // ===== Vercel 部署配置 =====
+  nitro: {
+    // 用空模块替换 better-sqlite3，防止 native .node 模块在 Vercel Lambda 中加载崩溃
+    // Nuxt Content 会把所有 db connector 都打包，但我们只用 postgresql
+    alias: {
+      'better-sqlite3': resolve(__dirname, 'node_modules/unenv/dist/runtime/mock/empty.mjs'),
+    },
+  },
 })

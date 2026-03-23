@@ -10,7 +10,6 @@ import 'node:fs';
 import 'node:path';
 import 'node:crypto';
 import 'pg';
-import 'better-sqlite3';
 
 //#region src/utils.ts
 function flatHooks(configHooks, hooks = {}, parentName) {
